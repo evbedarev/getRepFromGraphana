@@ -17,7 +17,7 @@ public class Main {
         StringBuffer sb = new StringBuffer();
         int countArgs = 0;
 
-        /*checks arguments*/
+        /*check arguments*/
         for (String arg : args) {
             if (arg.equals("-b") )
                 ArgBeginTime = countArgs;
@@ -25,7 +25,8 @@ public class Main {
                 ArgEndTime = countArgs;
             countArgs++;
         }
-        if (ArgBeginTime == 0 || ArgEndTime == 0) throw new IllegalArgumentException("no parametr -b or -e");
+        if (ArgBeginTime == 0 || ArgEndTime == 0)
+            throw new IllegalArgumentException("no parametr -b or -e");
         if (!args[ArgBeginTime+1].matches("[0-9]*") || !args[ArgEndTime+1].matches("[0-9]*") )
             throw new IllegalArgumentException("Invalid argument, must be numeric");
 
@@ -36,8 +37,10 @@ public class Main {
             if (arg.equals("-b"))
                 break;
             graphanaUrls.add(arg + args[ArgBeginTime+1] + ":" + args[ArgEndTime+1]);
-            graphanaUrls.add(arg.replaceAll("&from=", "&from=" + args[ArgBeginTime+1]).replaceAll("&to=", "&to=" + args[ArgEndTime+1]));
-            System.out.println(arg.replaceAll("&from=", "&from=" + args[ArgBeginTime+1]).replaceAll("&to=", "&to=" + args[ArgEndTime+1]));
+            graphanaUrls.add(arg
+                    .replaceAll("&from=", "&from=" + args[ArgBeginTime+1])
+                    .replaceAll("&to=", "&to=" + args[ArgEndTime+1])
+            );
         }
 
         GetReportFromGraphana getReportFromGraphana = new GetReportFromGraphana(graphanaUrls,
