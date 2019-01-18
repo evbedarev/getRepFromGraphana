@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * http://st1-3.vm.esrt.cloud.sbrf.ru:3000/d/0bEaq8Eik/stresstesting-allnodes-network?orgId=1&from=1547808313859&to=1547809213859&var-node=10.36.130.145%3A9100
  * arg -b - begin time
  * arg -e - end time
  * arg -f -  file to save
@@ -35,7 +36,8 @@ public class Main {
             if (arg.equals("-b"))
                 break;
             graphanaUrls.add(arg + args[ArgBeginTime+1] + ":" + args[ArgEndTime+1]);
-            System.out.println(arg + args[ArgBeginTime+1] + ":" + args[ArgEndTime+1]);
+            graphanaUrls.add(arg.replaceAll("&from=", "&from=" + args[ArgBeginTime+1]).replaceAll("&to=", "&to=" + args[ArgEndTime+1]));
+            System.out.println(arg.replaceAll("&from=", "&from=" + args[ArgBeginTime+1]).replaceAll("&to=", "&to=" + args[ArgEndTime+1]));
         }
 
         GetReportFromGraphana getReportFromGraphana = new GetReportFromGraphana(graphanaUrls,
