@@ -33,6 +33,7 @@ public class Main {
                 graphanaUrls,
                 args[argPathToSave + 1]);
         getReportFromGraphana.savePngToPdf();
+//        getReportFromGraphana.downloadFileUsingCurl();
     }
 
     /*check arguments*/
