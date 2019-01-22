@@ -39,8 +39,9 @@ public class GetReportFromGraphana {
     public String generateNameReport(String link) {
         Pattern pattern = Pattern.compile("/((?:[a-zA-Z]|-)*)(?:(?:\\?panelId)|(?:\\?orgId))");
         Matcher matcher = pattern.matcher(link);
-        matcher.find();
-        return matcher.group(1);
+        if (matcher.find())
+            return matcher.group(1);
+        return "noNameReport";
     }
 
     public void savePngToPdf() throws Exception {
@@ -59,7 +60,6 @@ public class GetReportFromGraphana {
 
     //curl -H "Authorization: Bearer eyJrIjoiYzNqd285RkZIQ0EwSkYwUVJBQzFRaTU1NFdTYTZnZTYiLCJuIjoiZXhwb3J0IiwiaWQiOjF9" http://st1-3.vm.esrt.cloud.sbrf.ru:3000/api/dashboards/home
     public HashMap<String,String> downloadFileUsingCurl(List<String> urls) throws IOException {
-        List<String> pngFiles = new ArrayList<>();
         HashMap<String, String> pngFileMap = new HashMap<>();
         for (String urlLink : urls) {
             URL url = new URL(urlLink);
@@ -68,7 +68,6 @@ public class GetReportFromGraphana {
             InputStream inputStream = uc.getInputStream();
             if (inputStream != null) {
                 String fileName = System.currentTimeMillis() + ".png";
-                pngFiles.add(pathToSave + fileName);
                 pngFileMap.put(pathToSave + fileName, generateNameReport(urlLink));
                 Files.copy(inputStream, Paths.get(pathToSave + fileName));
             }
