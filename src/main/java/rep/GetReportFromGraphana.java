@@ -51,8 +51,6 @@ public class GetReportFromGraphana {
 
         for (Map.Entry<String,String> pngFile: downloadFileUsingCurl(listUrls).entrySet()) {
             Image image = Image.getInstance(pngFile.getKey());
-            System.out.println("added");
-            System.out.println(pngFile.getValue());
             document.add(new Paragraph(pngFile.getValue()));
             document.add(image);
         }
@@ -68,7 +66,6 @@ public class GetReportFromGraphana {
             URLConnection uc = url.openConnection();
             uc.setRequestProperty("Authorization", "Bearer " + "eyJrIjoiYzNqd285RkZIQ0EwSkYwUVJBQzFRaTU1NFdTYTZnZTYiLCJuIjoiZXhwb3J0IiwiaWQiOjF9");
             InputStream inputStream = uc.getInputStream();
-            System.out.println(urlLink);
             if (inputStream != null) {
                 String fileName = System.currentTimeMillis() + ".png";
                 pngFiles.add(pathToSave + fileName);
