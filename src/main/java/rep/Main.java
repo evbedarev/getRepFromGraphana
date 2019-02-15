@@ -10,6 +10,7 @@ import java.util.List;
  * arg -path - path to file example '/home/mj/'
  */
 public class Main {
+    private static List<Integer> countArgsList = new ArrayList<>();
     private static int argBeginTime = 0;
     private static int argEndTime = 0;
     private static int argPathToSave = 0;
@@ -23,8 +24,10 @@ public class Main {
             if (arg.equals("-b"))
                 break;
             graphanaUrls.add(arg
-                    .replaceAll("&from=", "&from=" + args[argBeginTime + 1])
-                    .replaceAll("&to=", "&to=" + args[argEndTime + 1])
+                    .replaceAll("&from=\\d*", "&from=" + args[argBeginTime + 1] )
+                    .replaceAll("&to=\\d*", "&to=" + args[argEndTime + 1] )
+                    .replaceAll("&height=\\d*", "&height=300")
+                    .replaceAll("&width=\\d*", "&width=500")
             );
         }
 

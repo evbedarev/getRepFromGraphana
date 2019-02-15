@@ -63,6 +63,7 @@ public class GetReportFromGraphana {
         HashMap<String, String> pngFileMap = new HashMap<>();
         for (String urlLink : urls) {
             URL url = new URL(urlLink);
+            System.out.println(urlLink);
             URLConnection uc = url.openConnection();
             uc.setRequestProperty("Authorization", "Bearer " + "eyJrIjoiYzNqd285RkZIQ0EwSkYwUVJBQzFRaTU1NFdTYTZnZTYiLCJuIjoiZXhwb3J0IiwiaWQiOjF9");
             InputStream inputStream = uc.getInputStream();
