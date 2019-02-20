@@ -1,10 +1,10 @@
-import org.junit.*;
+import org.junit.Test;
 import rep.GetReportFromGraphana;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Test {
+public class TestJU {
 
 //    @org.junit.Test
 //    public void test() throws Exception {
@@ -14,7 +14,7 @@ public class Test {
 //        Assert.assertTrue(getReportFromGraphana.saveReport());
 //    }
 
-    @org.junit.Test
+    @Test
     public void saveToPdf() throws Exception {
         List<String> strings = new ArrayList<>();
         strings.add("https://avatars.mds.yandex.net/get-pdb/932587/260efa1d-862e-4b53-937c-c7149df36336/s1200?webp=false");

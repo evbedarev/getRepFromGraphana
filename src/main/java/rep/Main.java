@@ -8,6 +8,7 @@ import java.util.List;
  * arg -e - end time
  * arg -f -  file to save
  * arg -path - path to file example '/home/mj/'
+ * arg -path_to_build '/home/mj/'
  */
 public class Main {
     private static List<Integer> countArgsList = new ArrayList<>();
