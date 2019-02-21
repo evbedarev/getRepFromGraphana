@@ -23,7 +23,7 @@ public class CopyPdfInArtifacts {
                 .collect(Collectors.toList());
         List<String> numDirs = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("\\\\(\\d+)");
+        Pattern pattern = Pattern.compile("/(\\d+)");
         for (Path path : paths) {
             Matcher matcher = pattern.matcher(path.toString());
             if (matcher.find()) {
@@ -31,18 +31,19 @@ public class CopyPdfInArtifacts {
             }
         }
         numDirs.sort(new CompareDirs());
-        System.out.println(buildPath + numDirs.get(numDirs.size() - 1));
         return buildPath + numDirs.get(numDirs.size() - 1);
     }
 
     public void copyPdfToBuildAndDeleteFromSource(String pathToCopy) throws IOException {
+        System.out.println(Paths.get(new File("").getAbsoluteFile().toString()));
         List<Path> files = Files.walk(Paths.get(new File("").getAbsoluteFile().toString()), 1)
-                .filter(path -> path.toString().matches("(?:.*\\.pdf)||(?:.*\\.png)"))
+                .filter(path -> path.toString().matches("(?:/.*\\.pdf)||(?:/.*\\.png)"))
                 .collect(Collectors.toList());
+        System.out.println(files.size());
         for (Path file : files) {
-            if (file.toString().matches(".*\\.pdf"))
+            if (file.toString().matches("/.*\\.pdf"))
                 Files.copy(file,
-                    Paths.get(pathToCopy + "\\" + System.currentTimeMillis() + ".pdf"));
+                    Paths.get(pathToCopy + "/" + System.currentTimeMillis() + ".pdf"));
             Files.delete(file);
         }
     }

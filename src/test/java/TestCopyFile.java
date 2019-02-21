@@ -9,7 +9,7 @@ public class TestCopyFile {
     @Test
     public void testCopy() throws IOException {
         CopyPdfInArtifacts copyPdfInArtifacts = new CopyPdfInArtifacts();
-        String lastFolder = copyPdfInArtifacts.findNumericDirAndSort("C:\\TEMP\\");
+        String lastFolder = copyPdfInArtifacts.findNumericDirAndSort("/home/mj/");
         copyPdfInArtifacts.copyPdfToBuildAndDeleteFromSource(lastFolder);
     }
 }
