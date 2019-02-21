@@ -18,11 +18,14 @@ public class GetReportFromGraphana {
     private List<String> listUrls;
     private String pathToSave;
     private List<String> nameFiles;
+    private String keyBearer;
 
     public GetReportFromGraphana(List<String> listUrls,
-                                 String pathToSave) {
+                                 String pathToSave,
+                                 String keyBearer) {
         this.listUrls = listUrls;
         this.pathToSave = pathToSave;
+        this.keyBearer = keyBearer;
     }
 
     public boolean saveReport() throws Exception {
@@ -65,7 +68,7 @@ public class GetReportFromGraphana {
             URL url = new URL(urlLink);
             System.out.println(urlLink);
             URLConnection uc = url.openConnection();
-            uc.setRequestProperty("Authorization", "Bearer " + "eyJrIjoiYzNqd285RkZIQ0EwSkYwUVJBQzFRaTU1NFdTYTZnZTYiLCJuIjoiZXhwb3J0IiwiaWQiOjF9");
+            uc.setRequestProperty("Authorization", "Bearer " + keyBearer);
             InputStream inputStream = uc.getInputStream();
             if (inputStream != null) {
                 String fileName = System.currentTimeMillis() + ".png";
