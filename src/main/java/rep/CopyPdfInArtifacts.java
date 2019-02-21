@@ -17,14 +17,12 @@ import java.util.stream.Collectors;
 
 public class CopyPdfInArtifacts {
 
-    public static List<Path> findAllDirs(String path) throws IOException {
-        return Files.walk(Paths.get(path), 1)
+    public String findNumericDirAndSort(String buildPath) throws IOException {
+        List<Path> paths = Files.walk(Paths.get(buildPath), 1)
                 .filter(Files::isDirectory)
                 .collect(Collectors.toList());
-    }
-
-    public static List<String> findNumericDirAndSort(List<Path> paths, String rootDir) {
         List<String> numDirs = new ArrayList<>();
+
         Pattern pattern = Pattern.compile("\\\\(\\d+)");
         for (Path path : paths) {
             Matcher matcher = pattern.matcher(path.toString());
@@ -33,10 +31,11 @@ public class CopyPdfInArtifacts {
             }
         }
         numDirs.sort(new CompareDirs());
-        return numDirs;
+        System.out.println(buildPath + numDirs.get(numDirs.size() - 1));
+        return buildPath + numDirs.get(numDirs.size() - 1);
     }
 
-    public static void copyPdfToBuildAndDeleteFromSource(String pathToCopy) throws IOException {
+    public void copyPdfToBuildAndDeleteFromSource(String pathToCopy) throws IOException {
         List<Path> files = Files.walk(Paths.get(new File("").getAbsoluteFile().toString()), 1)
                 .filter(path -> path.toString().matches("(?:.*\\.pdf)||(?:.*\\.png)"))
                 .collect(Collectors.toList());
@@ -46,12 +45,5 @@ public class CopyPdfInArtifacts {
                     Paths.get(pathToCopy + "\\" + System.currentTimeMillis() + ".pdf"));
             Files.delete(file);
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        List<String> dirs;
-        dirs = findNumericDirAndSort(findAllDirs("c:\\TEMP\\"), "c:\\TEMP\\");
-        System.out.println(dirs.get(dirs.size() - 1));
-        System.out.println();
     }
 }

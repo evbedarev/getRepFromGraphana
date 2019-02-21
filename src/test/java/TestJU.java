@@ -13,7 +13,6 @@ public class TestJU {
 //        GetReportFromGraphana getReportFromGraphana = new GetReportFromGraphana(strings, "/home/");
 //        Assert.assertTrue(getReportFromGraphana.saveReport());
 //    }
-
     @Test
     public void saveToPdf() throws Exception {
         List<String> strings = new ArrayList<>();

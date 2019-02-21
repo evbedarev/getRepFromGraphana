@@ -8,8 +8,8 @@ public class TestCopyFile {
 
     @Test
     public void testCopy() throws IOException {
-        CopyPdfInArtifacts.copyPdfToBuildAndDeleteFromSource("C:\\TEMP\\55");
+        CopyPdfInArtifacts copyPdfInArtifacts = new CopyPdfInArtifacts();
+        String lastFolder = copyPdfInArtifacts.findNumericDirAndSort("C:\\TEMP\\");
+        copyPdfInArtifacts.copyPdfToBuildAndDeleteFromSource(lastFolder);
     }
-
-
 }
