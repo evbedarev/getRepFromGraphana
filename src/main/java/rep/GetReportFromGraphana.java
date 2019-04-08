@@ -41,7 +41,7 @@ public class GetReportFromGraphana {
 
     public String generateNameReport(String link) {
 //        Pattern pattern = Pattern.compile("/((?:[a-zA-Z]|-)*)(?:(?:\\?panelId)|(?:\\?orgId))");
-        Pattern pattern = Pattern.compile("var-host=(.*)&");
+        Pattern pattern = Pattern.compile("var-host=(\\d*\\.\\d*\\.\\d*\\.\\d*)&");
         Matcher matcher = pattern.matcher(link);
         if (matcher.find())
             return matcher.group(1);
@@ -53,29 +53,19 @@ public class GetReportFromGraphana {
         long timeCreatePdf = System.currentTimeMillis();
         PdfWriter.getInstance(document, new FileOutputStream(pathToSave + timeCreatePdf + ".pdf"));
         document.open();
-        List<String> newList = new ArrayList<>();
-        HashMap<String, String> pngFileMap = downloadFileUsingCurl(listUrls);
-//        for (Map.Entry<String,String> pngFile: pngFileMap.entrySet()) {
-//            Image image = Image.getInstance(pngFile.getKey());
-//            document.add(new Paragraph(pngFile.getValue()));
-//            document.add(image);
-//            System.out.println(pngFile.getKey() + " " + pngFile.getValue());
-//        }
+        LinkedHashMap<String, String> pngFileMap = downloadFileUsingCurl(listUrls);
         for (Map.Entry<String,String> pngFile: pngFileMap.entrySet()) {
-            newList.add(pngFile.getKey());
-        }
-        newList.sort(new CompareNamePng());
-        for (String name: newList) {
-            Image image = Image.getInstance(name);
+            Image image = Image.getInstance(pngFile.getKey());
+            document.add(new Paragraph(pngFile.getValue()));
             document.add(image);
-            System.out.println(name);
+            System.out.println(pngFile.getKey() + " " + pngFile.getValue());
         }
         document.close();
     }
 
     //curl -H "Authorization: Bearer eyJrIjoiYzNqd285RkZIQ0EwSkYwUVJBQzFRaTU1NFdTYTZnZTYiLCJuIjoiZXhwb3J0IiwiaWQiOjF9" http://st1-3.vm.esrt.cloud.sbrf.ru:3000/api/dashboards/home
-    public HashMap<String,String> downloadFileUsingCurl(List<String> urls) throws IOException {
-        HashMap<String, String> pngFileMap = new HashMap<>();
+    public LinkedHashMap<String,String> downloadFileUsingCurl(List<String> urls) throws IOException {
+        LinkedHashMap<String, String> pngFileMap = new LinkedHashMap<>();
         System.out.println(keyBearer);
         for (String urlLink : urls) {
             URL url = new URL(urlLink);
