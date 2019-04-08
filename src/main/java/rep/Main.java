@@ -1,11 +1,15 @@
 package rep;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * arg -b - begin time
- * arg -e - end timeПрр
+ * arg -e - end time
  * arg -f -  file to save
  * arg -path - path to file example '/home/mj/'
  * arg -key - Authorization key from grafana to view.
@@ -29,16 +33,28 @@ public class Main {
 
         /*generate links */
         List<String> graphanaUrls = new ArrayList<>();
-        for (String arg : args) {
-            if (arg.equals("-b"))
-                break;
-            graphanaUrls.add(arg
-                    .replaceAll("&from=\\d*", "&from=" + beginTime)
-                    .replaceAll("&to=\\d*", "&to=" + endTime)
-                    .replaceAll("&height=\\d*", "&height=300")
-                    .replaceAll("&width=\\d*", "&width=500")
-            );
+        try (Stream linesStream = Files.lines(new File(args[0]).toPath())) {
+            linesStream.forEach(line -> {
+                graphanaUrls.add(((String) line)
+                        .replaceAll("&from=\\d*", "&from=" + beginTime)
+                        .replaceAll("&to=\\d*", "&to=" + endTime)
+                        .replaceAll("&height=\\d*", "&height=300")
+                        .replaceAll("&width=\\d*", "&width=500"));
+
+            });
         }
+
+
+//        for (String arg : args) {
+//            if (arg.equals("-b"))
+//                break;
+//            graphanaUrls.add(arg
+//                    .replaceAll("&from=\\d*", "&from=" + beginTime)
+//                    .replaceAll("&to=\\d*", "&to=" + endTime)
+//                    .replaceAll("&height=\\d*", "&height=300")
+//                    .replaceAll("&width=\\d*", "&width=500")
+//            );
+//        }
 
         GetReportFromGraphana getReportFromGraphana = new GetReportFromGraphana(
                 graphanaUrls,

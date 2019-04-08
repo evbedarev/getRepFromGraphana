@@ -40,7 +40,8 @@ public class GetReportFromGraphana {
     }
 
     public String generateNameReport(String link) {
-        Pattern pattern = Pattern.compile("/((?:[a-zA-Z]|-)*)(?:(?:\\?panelId)|(?:\\?orgId))");
+//        Pattern pattern = Pattern.compile("/((?:[a-zA-Z]|-)*)(?:(?:\\?panelId)|(?:\\?orgId))");
+        Pattern pattern = Pattern.compile("var-host=(.*)&");
         Matcher matcher = pattern.matcher(link);
         if (matcher.find())
             return matcher.group(1);
@@ -52,11 +53,22 @@ public class GetReportFromGraphana {
         long timeCreatePdf = System.currentTimeMillis();
         PdfWriter.getInstance(document, new FileOutputStream(pathToSave + timeCreatePdf + ".pdf"));
         document.open();
-
-        for (Map.Entry<String,String> pngFile: downloadFileUsingCurl(listUrls).entrySet()) {
-            Image image = Image.getInstance(pngFile.getKey());
-            document.add(new Paragraph(pngFile.getValue()));
+        List<String> newList = new ArrayList<>();
+        HashMap<String, String> pngFileMap = downloadFileUsingCurl(listUrls);
+//        for (Map.Entry<String,String> pngFile: pngFileMap.entrySet()) {
+//            Image image = Image.getInstance(pngFile.getKey());
+//            document.add(new Paragraph(pngFile.getValue()));
+//            document.add(image);
+//            System.out.println(pngFile.getKey() + " " + pngFile.getValue());
+//        }
+        for (Map.Entry<String,String> pngFile: pngFileMap.entrySet()) {
+            newList.add(pngFile.getKey());
+        }
+        newList.sort(new CompareNamePng());
+        for (String name: newList) {
+            Image image = Image.getInstance(name);
             document.add(image);
+            System.out.println(name);
         }
         document.close();
     }
@@ -64,6 +76,7 @@ public class GetReportFromGraphana {
     //curl -H "Authorization: Bearer eyJrIjoiYzNqd285RkZIQ0EwSkYwUVJBQzFRaTU1NFdTYTZnZTYiLCJuIjoiZXhwb3J0IiwiaWQiOjF9" http://st1-3.vm.esrt.cloud.sbrf.ru:3000/api/dashboards/home
     public HashMap<String,String> downloadFileUsingCurl(List<String> urls) throws IOException {
         HashMap<String, String> pngFileMap = new HashMap<>();
+        System.out.println(keyBearer);
         for (String urlLink : urls) {
             URL url = new URL(urlLink);
             System.out.println(urlLink);
@@ -74,6 +87,8 @@ public class GetReportFromGraphana {
                 String fileName = System.currentTimeMillis() + ".png";
                 pngFileMap.put(pathToSave + fileName, generateNameReport(urlLink));
                 Files.copy(inputStream, Paths.get(pathToSave + fileName));
+            } else {
+                throw new NullPointerException("Cant download png from graphana...");
             }
         }
         return pngFileMap;
