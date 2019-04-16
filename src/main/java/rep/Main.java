@@ -39,22 +39,10 @@ public class Main {
                         .replaceAll("&from=\\d*", "&from=" + beginTime)
                         .replaceAll("&to=\\d*", "&to=" + endTime)
                         .replaceAll("&height=\\d*", "&height=300")
-                        .replaceAll("&width=\\d*", "&width=500"));
+                        .replaceAll("&width=\\d*", "&width=750"));
 
             });
         }
-
-
-//        for (String arg : args) {
-//            if (arg.equals("-b"))
-//                break;
-//            graphanaUrls.add(arg
-//                    .replaceAll("&from=\\d*", "&from=" + beginTime)
-//                    .replaceAll("&to=\\d*", "&to=" + endTime)
-//                    .replaceAll("&height=\\d*", "&height=300")
-//                    .replaceAll("&width=\\d*", "&width=500")
-//            );
-//        }
 
         GetReportFromGraphana getReportFromGraphana = new GetReportFromGraphana(
                 graphanaUrls,

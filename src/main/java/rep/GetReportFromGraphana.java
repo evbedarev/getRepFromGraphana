@@ -2,7 +2,8 @@ package rep;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfDocument;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.*;
 import java.net.URI;
@@ -50,15 +51,15 @@ public class GetReportFromGraphana {
 
     public void savePngToPdf() throws Exception {
         Document document = new Document();
+        document.setPageSize(PageSize.A4.rotate());
         long timeCreatePdf = System.currentTimeMillis();
         PdfWriter.getInstance(document, new FileOutputStream(pathToSave + timeCreatePdf + ".pdf"));
         document.open();
         LinkedHashMap<String, String> pngFileMap = downloadFileUsingCurl(listUrls);
         for (Map.Entry<String,String> pngFile: pngFileMap.entrySet()) {
             Image image = Image.getInstance(pngFile.getKey());
-            document.add(new Paragraph(pngFile.getValue()));
             document.add(image);
-            System.out.println(pngFile.getKey() + " " + pngFile.getValue());
+//            System.out.println(pngFile.getKey() + " " + pngFile.getValue());
         }
         document.close();
     }
@@ -66,10 +67,10 @@ public class GetReportFromGraphana {
     //curl -H "Authorization: Bearer eyJrIjoiYzNqd285RkZIQ0EwSkYwUVJBQzFRaTU1NFdTYTZnZTYiLCJuIjoiZXhwb3J0IiwiaWQiOjF9" http://st1-3.vm.esrt.cloud.sbrf.ru:3000/api/dashboards/home
     public LinkedHashMap<String,String> downloadFileUsingCurl(List<String> urls) throws IOException {
         LinkedHashMap<String, String> pngFileMap = new LinkedHashMap<>();
-        System.out.println(keyBearer);
+//        System.out.println(keyBearer);
         for (String urlLink : urls) {
             URL url = new URL(urlLink);
-            System.out.println(urlLink);
+            System.out.println("download png from: " + urlLink);
             URLConnection uc = url.openConnection();
             uc.setRequestProperty("Authorization", "Bearer " + keyBearer);
             InputStream inputStream = uc.getInputStream();
